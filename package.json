@@ -1,0 +1,21 @@
+{
+  "name": "dynamic-rate-limiter",
+  "version": "1.0.0",
+  "description": "A rate limiter with different rate limiting options available",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/index.js"
+  },
+  "keywords": [
+    "rate-limiter",
+    "servers",
+    "distributed"
+  ],
+  "author": "Obafemi",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@inquirer/select": "^2.2.0"
+  }
+}
