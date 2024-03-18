@@ -1,4 +1,5 @@
 import select, { Separator } from '@inquirer/select';
+import { RateLimiter } from './controllers/tokenBucket';
 
 const answer = await select({
     message: 'Select a Rate Limiting Algorithm',
@@ -29,3 +30,14 @@ const answer = await select({
         },
     ],
 });
+
+function apiHandler() {
+
+}
+
+let rateLimiter: RateLimiter
+
+if (answer == "token-bucket") {
+    rateLimiter = new RateLimiter(10, 1, 5, apiHandler)
+}
+
