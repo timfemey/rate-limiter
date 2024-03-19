@@ -36,11 +36,10 @@ class TokenBucket {
 
 class RateLimiter {
     private tokenBucket: TokenBucket
-    private threshold: number
+
     public handler: () => void
 
-    constructor(capacity: number, fillRate: number, threshold: number, apiHandler: () => void) {
-        this.threshold = threshold
+    constructor(capacity: number, fillRate: number, apiHandler: () => void) {
         this.tokenBucket = new TokenBucket(capacity, fillRate)
         this.handler = apiHandler
     }

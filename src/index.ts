@@ -38,6 +38,6 @@ function apiHandler() {
 let rateLimiter: RateLimiter
 
 if (answer == "token-bucket") {
-    rateLimiter = new RateLimiter(10, 1, 5, apiHandler)
+    rateLimiter = new RateLimiter(10, 1, apiHandler)
 }
 
