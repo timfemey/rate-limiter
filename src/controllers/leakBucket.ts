@@ -36,7 +36,7 @@ class LeakyBucket {
     }
 }
 
-class RateLimiter {
+class LeakBucketRateLimiter {
     handler: () => void
     protected bucket: LeakyBucket
     constructor(capacity: number, leakRate: number, apiHandler: () => void) {
@@ -63,4 +63,4 @@ class RateLimiter {
     }
 }
 
-export { RateLimiter }
+export { LeakBucketRateLimiter }

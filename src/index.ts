@@ -1,5 +1,6 @@
 import select, { Separator } from '@inquirer/select';
 import { RateLimiter } from './controllers/tokenBucket';
+import { LeakBucketRateLimiter } from './controllers/leakBucket';
 
 const answer = await select({
     message: 'Select a Rate Limiting Algorithm',
@@ -9,13 +10,12 @@ const answer = await select({
             value: 'Token Bucket Algorithm',
             description: 'A widely used rate limiting algorithm based on treating requests as tokens .',
         },
-
-        new Separator(),
         {
             name: 'leak-bucket',
             value: 'Leaking Bucket Algorithm',
             description: 'Similar to Token bucket algorithm except that request are processed at a fixed rate',
         },
+        new Separator(),
         {
             name: 'fixed-window',
             value: 'Fixed Window Counter Algorithm',
@@ -35,9 +35,12 @@ function apiHandler() {
 
 }
 
-let rateLimiter: RateLimiter
+
 
 if (answer == "token-bucket") {
-    rateLimiter = new RateLimiter(10, 1, apiHandler)
+    let rateLimiter = new RateLimiter(10, 1, apiHandler)
 }
 
+if (answer == "leak-bucket") {
+    let rateLimiter = new LeakBucketRateLimiter(10, 1, apiHandler)
+}
