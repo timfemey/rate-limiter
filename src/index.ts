@@ -15,13 +15,14 @@ const answer = await select({
             value: 'Leaking Bucket Algorithm',
             description: 'Similar to Token bucket algorithm except that request are processed at a fixed rate',
         },
-        new Separator(),
+
         {
             name: 'fixed-window',
             value: 'Fixed Window Counter Algorithm',
             description: "The algorithm divides the timeline into fix-sized time windows and assign a counter for each window",
-            disabled: "(Not yet available)",
+
         },
+        new Separator(),
         {
             name: 'sliding-window',
             value: 'Sliding Window Log Algorithm',
@@ -43,4 +44,8 @@ if (answer == "token-bucket") {
 
 if (answer == "leak-bucket") {
     let rateLimiter = new LeakBucketRateLimiter(10, 1, apiHandler)
+}
+
+if (answer == "fixed-window") {
+    let rateLimiter = new FixedWindowRateLimiter(1000, 10, apiHandler)
 }
