@@ -47,3 +47,5 @@ class FixedWindowRateLimiter {
 
     }
 }
+
+export { FixedWindowRateLimiter }

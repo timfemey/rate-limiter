@@ -45,3 +45,5 @@ class SlidingWindowLogRateLimiter {
         }
     }
 }
+
+export { SlidingWindowLogRateLimiter }
