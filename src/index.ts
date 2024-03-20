@@ -1,6 +1,8 @@
-import select, { Separator } from '@inquirer/select';
-import { RateLimiter } from './controllers/tokenBucket';
-import { LeakBucketRateLimiter } from './controllers/leakBucket';
+import select from '@inquirer/select';
+import { RateLimiter } from './controllers/tokenBucket.js';
+import { LeakBucketRateLimiter } from './controllers/leakBucket.js';
+import { FixedWindowRateLimiter } from './controllers/fixedWindow.js';
+import { SlidingWindowLogRateLimiter } from './controllers/slidingWindowLog.js';
 
 const answer = await select({
     message: 'Select a Rate Limiting Algorithm',
@@ -22,7 +24,6 @@ const answer = await select({
             description: "The algorithm divides the timeline into fix-sized time windows and assign a counter for each window",
 
         },
-        new Separator(),
         {
             name: 'sliding-window',
             value: 'Sliding Window Log Algorithm',
@@ -48,4 +49,8 @@ if (answer == "leak-bucket") {
 
 if (answer == "fixed-window") {
     let rateLimiter = new FixedWindowRateLimiter(1000, 10, apiHandler)
+}
+
+if (answer == "sliding-window") {
+    let rateLimiter = new SlidingWindowLogRateLimiter(1000, 10, apiHandler)
 }
