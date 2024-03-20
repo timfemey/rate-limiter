@@ -1,3 +1,5 @@
+import { Request, Response, NextFunction } from "express"
+
 class FixedWindow {
 
     readonly windowSize: number
@@ -26,24 +28,19 @@ class FixedWindow {
 
 class FixedWindowRateLimiter {
     counter: FixedWindow;
-    handler: () => void
+
     /**The window Size is the time window and should be specified in milliseconds and maxRequests is number of requests allowed in the windowSize */
-    constructor(windowSize: number, maxRequests: number, apiHandler: () => void) {
+    constructor(windowSize: number, maxRequests: number) {
         this.counter = new FixedWindow(windowSize, maxRequests)
-        this.handler = apiHandler
+
     }
 
-    public async handleRequest(req: any, res: any) {
+    public async handleRequest(req: Request, res: Response, next: NextFunction) {
         if (this.counter.increment() == false) {
             return res.status(429).send("Too many Requests")
         }
 
-        try {
-            await this.handler()
-        } catch (error) {
-            console.error("Error occured handling request: ", error)
-            res.status(500).send("Internal Server Error")
-        }
+        next()
 
     }
 }

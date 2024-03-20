@@ -1,3 +1,5 @@
+import { Request, Response, NextFunction } from "express"
+
 class TokenBucket {
     readonly capacity: number
     readonly fillRate: number
@@ -34,27 +36,22 @@ class TokenBucket {
     }
 }
 
-class RateLimiter {
+class TokenBucketRateLimiter {
     private tokenBucket: TokenBucket
 
-    public handler: () => void
-
-    constructor(capacity: number, fillRate: number, apiHandler: () => void) {
+    constructor(capacity: number, fillRate: number) {
         this.tokenBucket = new TokenBucket(capacity, fillRate)
-        this.handler = apiHandler
+
     }
 
-    async handleRequest(req: any, res: any) {
+    handleRequest(req: Request, res: Response, next: NextFunction) {
         if (this.tokenBucket.take(1) == false) {
             res.status(429).send("Too Many Requests")
             return
         }
-        try {
-            await this.handler();
-        } catch (error) {
-            console.error("Error handling request:", error);
-            res.status(500).send("Internal Server Error");
-        }
+
+        next()
+
 
     }
 
@@ -63,4 +60,4 @@ class RateLimiter {
     }
 }
 
-export { RateLimiter }
+export { TokenBucketRateLimiter }

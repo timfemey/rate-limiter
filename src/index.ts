@@ -1,5 +1,5 @@
 import select from '@inquirer/select';
-import { RateLimiter } from './controllers/tokenBucket.js';
+import { TokenBucketRateLimiter } from './controllers/tokenBucket.js';
 import { LeakBucketRateLimiter } from './controllers/leakBucket.js';
 import { FixedWindowRateLimiter } from './controllers/fixedWindow.js';
 import { SlidingWindowLogRateLimiter } from './controllers/slidingWindowLog.js';
@@ -33,24 +33,19 @@ const answer = await select({
     ],
 });
 
-function apiHandler() {
-
-}
-
-
 
 if (answer == "token-bucket") {
-    let rateLimiter = new RateLimiter(10, 1, apiHandler)
+    let rateLimiter = new TokenBucketRateLimiter(10, 1)
 }
 
 if (answer == "leak-bucket") {
-    let rateLimiter = new LeakBucketRateLimiter(10, 1, apiHandler)
+    let rateLimiter = new LeakBucketRateLimiter(10, 1)
 }
 
 if (answer == "fixed-window") {
-    let rateLimiter = new FixedWindowRateLimiter(1000, 10, apiHandler)
+    let rateLimiter = new FixedWindowRateLimiter(1000, 10)
 }
 
 if (answer == "sliding-window") {
-    let rateLimiter = new SlidingWindowLogRateLimiter(1000, 10, apiHandler)
+    let rateLimiter = new SlidingWindowLogRateLimiter(1000, 10)
 }

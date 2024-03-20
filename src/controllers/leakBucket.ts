@@ -1,3 +1,5 @@
+import { Request, Response, NextFunction } from "express"
+
 class LeakyBucket {
     readonly capacity: number;
     tokens: number;
@@ -37,25 +39,18 @@ class LeakyBucket {
 }
 
 class LeakBucketRateLimiter {
-    handler: () => void
     protected bucket: LeakyBucket
-    constructor(capacity: number, leakRate: number, apiHandler: () => void) {
+    constructor(capacity: number, leakRate: number) {
         this.bucket = new LeakyBucket(capacity, leakRate)
-        this.handler = apiHandler
     }
 
-    async handleRequest(req: any, res: any) {
+    async handleRequest(req: Request, res: Response, next: NextFunction) {
         if (this.bucket.addToken() == false) {
             return res.status(429).send("Too Many Requests")
 
         }
 
-        try {
-            await this.handler
-        } catch (error) {
-            console.error("Error Handling Request: ", error)
-            res.status(500).send("Internal Server Error")
-        }
+        next()
     }
 
     stop() {

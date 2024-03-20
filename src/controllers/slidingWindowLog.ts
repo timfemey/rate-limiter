@@ -1,3 +1,5 @@
+import { Request, Response, NextFunction } from "express"
+
 class SlidingWindowLog {
     readonly windowSize: number
     readonly maxRequests: number
@@ -16,7 +18,7 @@ class SlidingWindowLog {
 }
 
 class SlidingWindowLogRateLimiter {
-    handler: () => void
+
     readonly windowSize: number
     readonly maxRequests: number
     slidingWindowLog: SlidingWindowLog
@@ -24,25 +26,20 @@ class SlidingWindowLogRateLimiter {
     /** windowSize is supposed to be in milliiseconds, The time window
      * maxRequests is the number of requests allowed in the time window
      */
-    constructor(windowSize: number, maxRequests: number, apiHandler: () => void) {
+    constructor(windowSize: number, maxRequests: number) {
         this.windowSize = windowSize
         this.maxRequests = maxRequests
-        this.handler = apiHandler
+
         this.slidingWindowLog = new SlidingWindowLog(windowSize, maxRequests)
     }
 
-    async handleRequest(req: any, res: any) {
+    async handleRequest(req: Request, res: Response, next: NextFunction) {
         const timestamp = Date.now()
         if (this.slidingWindowLog.addReq(timestamp) == false) {
             return res.status(429).send("Too Many Requests")
         }
 
-        try {
-            await this.handler()
-        } catch (error) {
-            console.error("Error handling requests: ", error)
-            res.status(500).send("Internal Server Error")
-        }
+        next()
     }
 }
 
