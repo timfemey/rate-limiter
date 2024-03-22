@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./dist/index.js"
+    "start": "node ./dist/index.js",
+    "prepublish": "tsc"
   },
   "keywords": [
     "rate-limiter",
@@ -17,7 +17,6 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "@inquirer/select": "^2.2.0",
     "@types/express": "^4.17.21"
   }
 }
