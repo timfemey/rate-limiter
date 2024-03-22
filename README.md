@@ -15,23 +15,33 @@ With this library, you can easily implement rate limiting in your Node.js applic
 - **Customizable Configuration:** Adjust parameters such as window size, maximum requests, and leak rate to fine-tune the rate limiter's behavior.
 - **Integration with HTTP Libraries:** Use the rate limiter as middleware with popular HTTP libraries like Express, enabling seamless integration into your Node.js web applications.
 
+## Installation
+
+You can install the rate limiter library via npm:
+
+```bash
+npm install dynamic-rate-limiter
+```
+
 ## Usage
 
 ### Using as Middleware with Express
 
 ```javascript
 const express = require("express");
-const { FixedWindowRateLimiter } = require("rate-limiter");
+const RateLimiter = require("dynamic-rate-limiter");
 
 const app = express();
 
 // Create a rate limiter instance with desired configuration
 const windowSize = 60000; // 1 minute window
 const maxRequests = 70; // Maximum 70 requests allowed in a minute
-const rateLimiter = new FixedWindowRateLimiter(windowSize, maxRequests);
+const rateLimiter = RateLimiter("fixed-window");
 
 // Use rate limiter as middleware
-app.use((req, res, next) => rateLimiter.handleRequest(req, res, next));
+app.use((req, res, next) =>
+  rateLimiter(windowSize, maxRequests).handleRequest(req, res, next)
+);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
